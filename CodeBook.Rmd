@@ -1,0 +1,77 @@
+---
+title: "Code Book"
+author: "Alireza Haddadi"
+date: "2022-08-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This code Book describes the `run_analysis.R` file for the **"Getting and Cleaning Data"** project course in [Coursera.org](https://www.coursera.org/learn/data-cleaning/home/info). you need to run `run_analysis.R` or study `run_analysis.Rmd` Rmarkdown to get extra information about the file.
+
+in this Code Book the information about the "UCI HAR Dataset" data set is provided.
+
+**1. Download The data set**
+
+* the data set was downloaded and placed in a project folder as `UCI HAR Dataset`.
+
+**2. Variable assignment**
+
+* `features` <- `features.txt` : 561 rows, 2 columns <br/> *features.txt describes the number and function for each activities.*
+
+* `activities` <- `activity_labels.txt` : 6 rows, 2 columns <br/> *this file is about list of activities related to each function measurement.*
+
+* `subject_test` <- `test/subject_test.txt` : 2947 rows, 1 column <br/> *contains test data of 9/30 volunteer test subjects being observed*
+
+* `x_test` <- `test/X_test.txt` : 2947 rows, 561 columns <br/> *contains recorded features test data*
+
+* `y_test` <- `test/y_test.txt` : 2947 rows, 1 columns <br/> *contains test data of activities’ code labels*
+
+* `subject_train` <- `test/subject_train.txt` : 7352 rows, 1 column <br/> *contains train data of 21/30 volunteer subjects being observed*
+
+* `x_train` <- `test/X_train.txt` : 7352 rows, 561 columns <br/> *contains recorded features train data*
+
+* `y_train` <- `test/y_train.txt` : 7352 rows, 1 columns <br/> *contains train data of activities’ code labels*
+
+**3. Merging the data to get all data together**
+
+* `X` (10299 rows, 561 columns) is created by merging `x_train` and `x_test` using **rbind()** function
+
+* `Y` (10299 rows, 1 column) is created by merging ``y_train` and ``y_test` using **rbind()** function
+
+* `Subject` (10299 rows, 1 column) is created by merging `subject_train` and `subject_test` using **rbind()** function
+
+* `Merged_Data` (10299 rows, 563 column) is created by merging `Subject`, `Y` and `X` using **cbind()** function
+
+**4. Extracting mean and standard deviation from groups of measurements**
+
+* `TidyData` (10299 rows, 88 columns) is created by subsetting `Merged_Data`, selecting only columns: subject, code and the measurements on the `mean` and standard deviation (`std`) for each measurement.
+
+**5. Chnaging activity numbers to show the descriptive activity**
+
+* Entire numbers in code column of the `TidyData` replaced with corresponding activity taken from second column of the `activities` variable
+
+**6. Adjust the name of each column to have a clean and appropriate name**
+
+* `code` column in `TidyData` renamed into `activities`
+
+* All `Acc` in column’s name replaced by `Accelerometer`
+
+* All `Gyro` in column’s name replaced by `Gyroscope`
+
+* All `BodyBody` in column’s name replaced by `Body`
+
+* All `Mag` in column’s name replaced by `Magnitude`
+
+* All start with character `f` in column’s name replaced by `Frequency`
+
+* All start with character `t` in column’s name replaced by `Time`
+
+
+**7. The final table with means of every column**
+
+* `FinalData` (180 rows, 88 columns) is created by sumarizing `TidyData` taking the means of each variable for each activity and each subject, after groupped by subject and activity.
+
+* Export `FinalData` into `FinalData.txt` file.
